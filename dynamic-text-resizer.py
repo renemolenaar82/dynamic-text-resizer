@@ -1,11 +1,14 @@
 import tkinter as tk
 from tkinter import font as tkfont
+import platform
 
 class DynamicFontApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Dynamic Font Size Text")
-        self.root.geometry("600x400")
+        
+        # Make the window open maximized on both Windows and Linux
+        self.maximize_window()
         
         # Set the background color of the root window
         self.root.configure(bg="black")
@@ -38,6 +41,39 @@ class DynamicFontApp:
         
         # Flag to avoid recursive calls
         self.adjusting = False
+    
+    def maximize_window(self):
+        """Maximize window using platform-specific methods"""
+        # First update idle tasks to ensure window metrics are available
+        self.root.update_idletasks()
+        
+        # Get screen dimensions
+        screen_width = self.root.winfo_screenwidth()
+        screen_height = self.root.winfo_screenheight()
+        
+        # Set initial size (as fallback)
+        self.root.geometry(f"{screen_width}x{screen_height}+0+0")
+        
+        # Platform-specific maximization
+        system = platform.system()
+        if system == "Windows":
+            self.root.state('zoomed')
+        elif system == "Linux":
+            self.root.attributes('-zoomed', True)
+        else:  # macOS or other platforms
+            # Try different methods
+            try:
+                self.root.state('zoomed')
+            except:
+                try:
+                    self.root.attributes('-zoomed', True)
+                except:
+                    # Last resort - explicitly set window to use full screen dimensions
+                    self.root.geometry(f"{screen_width}x{screen_height}+0+0")
+        
+        # Ensure the window appears on top initially
+        self.root.lift()
+        self.root.focus_force()
         
     def setup_keyboard_shortcuts(self):
         """Set up keyboard shortcuts that work consistently across platforms"""
