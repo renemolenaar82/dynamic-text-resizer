@@ -41,6 +41,9 @@ class DynamicFontApp:
         
         # Flag to avoid recursive calls
         self.adjusting = False
+        
+        # Schedule window activation after the main loop starts
+        self.root.after(100, self.activate_window)
     
     def maximize_window(self):
         """Maximize window using platform-specific methods"""
@@ -70,10 +73,22 @@ class DynamicFontApp:
                 except:
                     # Last resort - explicitly set window to use full screen dimensions
                     self.root.geometry(f"{screen_width}x{screen_height}+0+0")
+    
+    def activate_window(self):
+        """Ensure window is active and has focus"""
+        # Force window to be on top
+        self.root.attributes('-topmost', True)
+        self.root.update()
+        self.root.attributes('-topmost', False)
         
-        # Ensure the window appears on top initially
-        self.root.lift()
-        self.root.focus_force()
+        # Give focus to the text widget
+        self.text_widget.focus_set()
+        
+        # Place cursor in the text widget
+        self.text_widget.mark_set(tk.INSERT, "1.0")
+        
+        # Ensure the window is drawn properly
+        self.root.update_idletasks()
         
     def setup_keyboard_shortcuts(self):
         """Set up keyboard shortcuts that work consistently across platforms"""
