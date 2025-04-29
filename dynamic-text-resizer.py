@@ -33,8 +33,29 @@ class DynamicFontApp:
         # Bind window resize events to adjust font
         self.root.bind("<Configure>", self.on_window_resize)
         
+        # Add cross-platform keyboard shortcuts
+        self.setup_keyboard_shortcuts()
+        
         # Flag to avoid recursive calls
         self.adjusting = False
+        
+    def setup_keyboard_shortcuts(self):
+        """Set up keyboard shortcuts that work consistently across platforms"""
+        # Bind Ctrl+A to select all text
+        self.text_widget.bind("<Control-a>", self.select_all)
+        
+        # You can add more cross-platform shortcuts here if needed
+        # For example:
+        # self.text_widget.bind("<Control-c>", self.copy_text)
+        # self.text_widget.bind("<Control-v>", self.paste_text)
+        # self.text_widget.bind("<Control-x>", self.cut_text)
+        
+    def select_all(self, event=None):
+        """Select all text in the text widget"""
+        self.text_widget.tag_add(tk.SEL, "1.0", tk.END)
+        self.text_widget.mark_set(tk.INSERT, tk.END)
+        self.text_widget.see(tk.INSERT)
+        return "break"  # Prevents default handling
         
     def update_font(self):
         custom_font = tkfont.Font(family=self.font_family, size=self.current_font_size)
