@@ -17,10 +17,10 @@ class DynamicFontApp:
         self.text_widget = tk.Text(
             root, 
             wrap="word", 
-            padx=20, 
-            pady=20,
-            bg="black",    # Background color
-            fg="white",    # Foreground (text) color
+            padx=40, 
+            pady=40,
+            bg="#1A1A1A",    # Dark gray background
+            fg="#E0E0E0",    # Light gray text
             insertbackground="white"  # Cursor color
         )
         self.text_widget.pack(fill="both", expand=True)
